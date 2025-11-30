@@ -1,59 +1,144 @@
-import { useState } from "react";
+// --- Icons ---
 
-const ProfileEditor = () => {
-  const [bio, setBio] = useState("");
-  const [cvLink, setCvLink] = useState("");
+const PhotoCameraIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className="w-8 h-8"
+  >
+    <path d="M12 9a3 3 0 1 0 3 3 3 3 0 0 0-3-3Zm0 8a5 5 0 1 1 5-5 5 5 0 0 1-5 5Zm9-11h-2.59l-.3-.38L16.4 3.7A2 2 0 0 0 14.88 3H9.12a2 2 0 0 0-1.52.7L5.89 5.62l-.3.38H3a2 2 0 0 0-2 2V19a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2ZM3 19V8h3.33l.29-.38L8.33 5h7.34l1.71 2.62.29.38H21v11Z" />
+  </svg>
+);
 
-  const handleSave = () => {
-    alert("Your changes have been saved successfully");
-  };
+// --- Sub-components ---
 
+const ProfileHeader = () => (
+  <header className="flex flex-wrap justify-between items-center gap-4 mb-8">
+    <h1 className="text-white text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em]">
+      User Profile
+    </h1>
+  </header>
+);
+
+const ProfileForm = () => {
   return (
-    <div className="flex flex-col items-center gap-8">
-      <div className="self-start">
-        <h1 className="text-4xl font-serif font-bold text-foreground mb-2">
-          Edit Profile
-        </h1>
-        <p className="text-muted-foreground">
-          Update your public profile information
-        </p>
-      </div>
-
-      <div className="min-w-1/2 bg-card p-8 rounded-lg border border-border">
-        <div className="space-y-6">
-          <div className="flex flex-col gap-2">
-            <label htmlFor="bio">Biography</label>
-            <textarea
-              className="flex min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              id="bio"
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
-              placeholder="Enter your biography..."
-              rows={8}
-            />
+    <div className="w-full max-w-4xl mx-auto">
+      <div className="rounded-lg border border-[#3b4c54] bg-[#111618] p-6 md:p-8">
+        <form className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Profile Picture Section */}
+          <div className="md:col-span-1 flex flex-col items-center">
+            <span className="text-white/50 text-sm mb-2">Profile Picture</span>
+            <div className="relative group cursor-pointer">
+              <div
+                className="w-40 h-40 rounded-full bg-cover bg-center border-2 border-[#3b4c54]"
+                style={{
+                  backgroundImage:
+                    "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAWnwsQkugxgJiYVDz3Io0H1-d6wZacdiT4uge5yce7LdykiEQ9Y3NVYeU_b_DJXq-XBoY_PHNc4fHZ5zT-Vk31tnqkeWV3ICuW2SwNVvei0U6ZH246UeybSbx3mJLSms5jRFYOdMnjTnsjUzbi-9S9uhY69lL_Em009YHZI5q2PGRdfB_VQMEg3wpa9-r6GSFrXGkj4CXN-1yEegrxeeoQw6LNURDLg6Qs1k3KrGzCBTxc1ppZUnQCz9gmFx8-LUJKW5nuEIKSqNY')",
+                }}
+              ></div>
+              <button
+                className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                type="button"
+              >
+                <div className="text-white">
+                  <PhotoCameraIcon />
+                </div>
+              </button>
+            </div>
+            <p className="text-xs text-[#9cb0ba] mt-4 text-center">
+              Click image to upload a new one. <br /> JPG, PNG, GIF, max 2MB.
+            </p>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label htmlFor="cvLink">CV Link</label>
-            <input
-              className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
-              id="cvLink"
-              type="url"
-              value={cvLink}
-              onChange={(e) => setCvLink(e.target.value)}
-              placeholder="https://example.com/cv.pdf"
-            />
+          {/* Form Fields Section */}
+          <div className="md:col-span-2 space-y-6">
+            <div>
+              <label
+                className="block text-sm font-medium text-white/80 mb-2"
+                htmlFor="name"
+              >
+                Name
+              </label>
+              <input
+                className="w-full bg-[#1b2327] border border-[#3b4c54] text-white text-sm rounded-lg focus:ring-[#4cf676] focus:border-[#4cf676] block p-2.5 placeholder-[#9cb0ba] focus:outline-none transition-colors"
+                id="name"
+                type="text"
+                defaultValue="Jane Doe"
+              />
+            </div>
+            <div>
+              <label
+                className="block text-sm font-medium text-white/80 mb-2"
+                htmlFor="email"
+              >
+                Email
+              </label>
+              <input
+                className="w-full bg-[#1b2327] border border-[#3b4c54] text-white text-sm rounded-lg focus:ring-[#4cf676] focus:border-[#4cf676] block p-2.5 placeholder-[#9cb0ba] focus:outline-none transition-colors"
+                id="email"
+                type="email"
+                defaultValue="jane.doe@example.com"
+              />
+            </div>
+            <div>
+              <label
+                className="block text-sm font-medium text-white/80 mb-2"
+                htmlFor="role"
+              >
+                Role
+              </label>
+              <select
+                className="w-full bg-[#1b2327] border border-[#3b4c54] text-white text-sm rounded-lg focus:ring-[#4cf676] focus:border-[#4cf676] block p-2.5 focus:outline-none transition-colors"
+                id="role"
+                defaultValue="Administrator"
+              >
+                <option>Member</option>
+                <option>Administrator</option>
+                <option>Editor</option>
+              </select>
+            </div>
+            <div>
+              <label
+                className="block text-sm font-medium text-white/80 mb-2"
+                htmlFor="password"
+              >
+                Password
+              </label>
+              <input
+                className="w-full bg-[#1b2327] border border-[#3b4c54] text-white text-sm rounded-lg focus:ring-[#4cf676] focus:border-[#4cf676] block p-2.5 placeholder-[#9cb0ba] focus:outline-none transition-colors"
+                id="password"
+                placeholder="••••••••••••"
+                type="password"
+              />
+            </div>
+            <div className="flex justify-end">
+              <button
+                className="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-6 bg-blue-400 text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90 transition-colors"
+                type="submit"
+              >
+                <span className="truncate">Save Changes</span>
+              </button>
+            </div>
           </div>
-
-          <button
-            className="w-full py-2 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90"
-            onClick={handleSave}
-          >
-            Save Changes
-          </button>
-        </div>
+        </form>
       </div>
     </div>
+  );
+};
+
+// --- Main Page Component ---
+
+const ProfileEditor = () => {
+  return (
+      <main className="flex-1 flex flex-col">
+        <div className="grow p-6 lg:p-8 max-w-[1600px] mx-auto w-full">
+          <ProfileHeader />
+          <ProfileForm />
+        </div>
+      </main>
   );
 };
 

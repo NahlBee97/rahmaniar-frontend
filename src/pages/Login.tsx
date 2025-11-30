@@ -1,68 +1,117 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+// --- Validation Schema ---
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
+const loginValidationSchema = Yup.object({
+  username: Yup.string().required("Username is required"),
+  password: Yup.string().required("Password is required"),
+});
 
-    // Simple mock authentication
-    if (email && password) {
-      localStorage.setItem("isAuthenticated", "true");
-      alert("Login successful");
-      navigate("/admin");
-    } else {
-      alert("Login failed");
-    }
-  };
+// --- Main Page Component ---
+
+const AdminLoginPage = () => {
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      password: "",
+    },
+    validationSchema: loginValidationSchema,
+    onSubmit: (values: any) => {
+      console.log("Login Attempt:", values);
+      // Add authentication logic here
+    },
+  });
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        <div className="bg-card p-8 rounded-lg border border-border">
-          <h1 className="text-3xl font-serif font-bold text-foreground mb-6 text-center">
-            Admin Login
-          </h1>
-
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="email">Email</label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@example.com"
-                className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
-              />
+    <div className="bg-linear-to-br from-[#0a111a] to-[#12222b] min-h-screen text-gray-300 font-sans flex flex-col">
+      <main className="grow flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
+        <div className="w-full max-w-md">
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-8 backdrop-blur-sm shadow-2xl">
+            <div className="text-center mb-8">
+              <h1 className="text-3xl sm:text-4xl font-bold text-blue-400">
+                Admin Login
+              </h1>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <label htmlFor="password">Password</label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
-              />
-            </div>
+            <form onSubmit={formik.handleSubmit} className="space-y-6">
+              {/* Username Field */}
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-400 mb-1"
+                  htmlFor="username"
+                >
+                  Username
+                </label>
+                <div className="mt-1">
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    autoComplete="username"
+                    className={`appearance-none block w-full px-3 py-2 bg-gray-900/50 border rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-white transition-colors ${
+                      formik.touched.username && formik.errors.username
+                        ? "border-red-500"
+                        : "border-gray-600"
+                    }`}
+                    value={formik.values.username}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched.username && formik.errors.username && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {/* {formik.errors.username} */}
+                    </p>
+                  )}
+                </div>
+              </div>
 
-            <button
-              type="submit"
-              className="w-full py-2 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90"
-            >
-              Login
-            </button>
-          </form>
+              {/* Password Field */}
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-400 mb-1"
+                  htmlFor="password"
+                >
+                  Password
+                </label>
+                <div className="mt-1">
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    className={`appearance-none block w-full px-3 py-2 bg-gray-900/50 border rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-white transition-colors ${
+                      formik.touched.password && formik.errors.password
+                        ? "border-red-500"
+                        : "border-gray-600"
+                    }`}
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched.password && formik.errors.password && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {/* {formik.errors.password} */}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <div>
+                <button
+                  type="submit"
+                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-blue-500 transition-colors"
+                >
+                  Login
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
 
-export default Login;
+export default AdminLoginPage;
